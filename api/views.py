@@ -14,7 +14,7 @@ import jwt
 from .decorators import is_admin_or_has_valid_OIDC_id
 from django.views.generic.edit import FormView
 import os
-
+from api.tasks import send_sms_notification
 
 
 def status(request):
@@ -31,7 +31,7 @@ def oauth_callback(request):
         token_endpoint = 'http://127.0.0.1:8000/openid/token/'
         redirect_uri = 'http://127.0.0.1:8000/oauth_callback/'
         client_id = os.environ.get('CLIENT_ID', None)
-        client_secret = 'e01fdc44d9c4a357c18aa90b52005d90f084928e98c576fcf83aa163'
+        client_secret = os.environ.get('CLIENT_SECRET', None)
 
         response = requests.post(
             token_endpoint,
@@ -202,7 +202,11 @@ class Create_order(FormView):
                 customer_ref = Customer.objects.get(name=customer)
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
+                recepients = [customer_ref.phone_number]
+                id = order.id
+                send_sms_notification.delay(recepients, id)
             except Exception as e:
+                print(e)
                 response = JsonResponse({ "message": e.args[0] }, status=404)
                 return response
             return JsonResponse({"message": 'order added successfully'})
@@ -224,6 +228,9 @@ class Create_order(FormView):
                 customer_ref = Customer.objects.get(name=customer)
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
+                recepients = [customer_ref.phone_number]
+                id = order.id
+                send_sms_notification.delay(recepients, id)
             except Exception as e:
                 response = JsonResponse({ "message": e.args[0] }, status=404)
                 return response

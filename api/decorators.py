@@ -19,7 +19,6 @@ def is_admin_or_has_valid_OIDC_id(view_func):
     """
     @wraps(view_func)
     def wrapped_view(instance, request, *args, **kwargs):
-        code_challenge = 'yhxshAB4nU43b-7Ur0oFJyvmgyo8wVUs8mJkX9qiNJU'
         client_id = os.environ.get('CLIENT_ID', None)
         base_url = 'openid/authorize/?'
         url = '{}response_type=code&client_id={}&redirect_uri={}&scope={}'.format(
@@ -46,6 +45,13 @@ def is_admin_or_has_valid_OIDC_id(view_func):
                 return redirect(url)
             try:
                 decoded_token = jwt.decode(oidc_id_token, key=key, algorithms=['RS256'], audience=[client_id])
+                print(decoded_token)
+                current_time = datetime.utcnow()
+                exp_time = datetime.utcfromtimestamp(decoded_token['exp'])
+                print(exp_time)
+                print(current_time)
+                if current_time > exp_time:
+                    raise jwt.ExpiredSignatureError
                 #decoded_token = jwt.decode(oidc_id_token, options={"verify_signature": False})
                 return view_func(instance, request, *args, **kwargs)
             except jwt.InvalidSignatureError as e:
