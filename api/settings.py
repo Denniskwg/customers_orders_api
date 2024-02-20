@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'api',
     'oauth2_provider',
     'oidc_provider',
-    'notifications',
 ]
 
 MIDDLEWARE = [

@@ -148,6 +148,29 @@ class Register(APIView):
             return response
         return render(request, 'register.html', {'form': RegisterForm()})
 
+    def get(self, request, *args, **kwargs):
+        """accepts post requests for the register view and registers user
+        """
+        form = RegisterForm(request.POST)
+        if form.is_valid():
+            username = form.cleaned_data['username']
+            password = form.cleaned_data['password']
+            try:
+                validate_password(password, user=None)
+            except ValidationError as e:
+                error_messages = [str(message) for message in e.messages]
+                return JsonResponse({"error": error_messages}, status=400)
+            try:
+                user = User.objects.create_user(username=username, password=password)
+                user.backend = 'django.contrib.auth.backends.ModelBackend'
+                user.save()
+            except Exception as e:
+                response = JsonResponse({ "message": e.args[0] }, status=404)
+                return response
+            response = JsonResponse({ "message": "User created successfully" }, status=200)
+            return response
+        return render(request, 'register.html', {'form': RegisterForm()})
+
 
 class Create_customer(FormView):
     """creates a customer entry
@@ -203,8 +226,8 @@ class Create_order(FormView):
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
                 recepients = [customer_ref.phone_number]
-                id = order.id
-                send_sms_notification.delay(recepients, id)
+                print(item)
+                send_sms_notification.delay(recepients, item)
             except Exception as e:
                 print(e)
                 response = JsonResponse({ "message": e.args[0] }, status=404)
@@ -229,8 +252,8 @@ class Create_order(FormView):
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
                 recepients = [customer_ref.phone_number]
-                id = order.id
-                send_sms_notification.delay(recepients, id)
+                print(item)
+                send_sms_notification.delay(recepients, item)
             except Exception as e:
                 response = JsonResponse({ "message": e.args[0] }, status=404)
                 return response

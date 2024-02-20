@@ -1,3 +1,12 @@
-<!-- homepage.html -->
-<h1>Welcome to My Website</h1>
-<a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a> | <a href="{% url 'logout' %}">Logout</a>
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+	<link rel="stylesheet" type="text/css" href="{% static 'css/style.css' %}"/>
+    </head>
+    <body>
+        <h1>Customer and order managemenr</h1>
+        <a href="{% url 'login' %}">Login</a> | <a href="{% url 'register' %}">Register</a> | <a href="{% url 'logout' %}">Logout</a>
+    </body>
+</html>

@@ -45,11 +45,8 @@ def is_admin_or_has_valid_OIDC_id(view_func):
                 return redirect(url)
             try:
                 decoded_token = jwt.decode(oidc_id_token, key=key, algorithms=['RS256'], audience=[client_id])
-                print(decoded_token)
                 current_time = datetime.utcnow()
                 exp_time = datetime.utcfromtimestamp(decoded_token['exp'])
-                print(exp_time)
-                print(current_time)
                 if current_time > exp_time:
                     raise jwt.ExpiredSignatureError
                 #decoded_token = jwt.decode(oidc_id_token, options={"verify_signature": False})
