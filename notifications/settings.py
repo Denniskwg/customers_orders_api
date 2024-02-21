@@ -18,7 +18,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.environ.get('db_username'), os.environ.get('db_password'))
-
+db_url = os.environ.get('JAWSDB_URL', DATABASE_URL)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -81,7 +81,7 @@ WSGI_APPLICATION = 'notifications.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=DATABASE_URL)
+    'default': dj_database_url.config(default=db_url)
 }
 
 
@@ -128,5 +128,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Celery settings
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"
+CELERY_BROKER_URL = os.getenv("REDIS_URL","redis://localhost:6379")
+CELERY_RESULT_BACKEND = os.getenv("REDIS_URL","redis://localhost:6379")

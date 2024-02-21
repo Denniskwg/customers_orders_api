@@ -19,6 +19,6 @@ class CustomerForm(forms.ModelForm):
 
 
 class OrderForm(forms.Form):
-    name = forms.CharField(max_length=60)
+    customer_name = forms.CharField(max_length=60)
     item = forms.CharField(max_length=60)
     amount = forms.IntegerField(min_value=1)

@@ -19,6 +19,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.environ.get('db_username'), os.environ.get('db_password'))
 
+db_url = os.environ.get('JAWSDB_URL', DATABASE_URL)
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -27,7 +29,7 @@ DATABASE_URL = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.e
 SECRET_KEY = 'django-insecure-a$m+5c_13uti!5(!iq_aagqd4rv4hmvpl3wi8-f(&$3uq)i1)c'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = os.environ.get('DJANGO_DEBUG', 'False') == 'True'
 
 ALLOWED_HOSTS = []
 
@@ -45,6 +47,7 @@ INSTALLED_APPS = [
     'api',
     'oauth2_provider',
     'oidc_provider',
+    'notifications',
 ]
 
 MIDDLEWARE = [
@@ -91,7 +94,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=DATABASE_URL)
+    'default': dj_database_url.config(default=db_url)
 }
 
 
@@ -137,7 +140,3 @@ LOGIN_URL = '/login'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-
-# Celery settings
-CELERY_BROKER_URL = "redis://localhost:6379"
-CELERY_RESULT_BACKEND = "redis://localhost:6379"

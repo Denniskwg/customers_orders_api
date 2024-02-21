@@ -149,7 +149,7 @@ class Register(APIView):
         return render(request, 'register.html', {'form': RegisterForm()})
 
     def get(self, request, *args, **kwargs):
-        """accepts post requests for the register view and registers user
+        """accepts get requests for the register view and registers user
         """
         form = RegisterForm(request.POST)
         if form.is_valid():
@@ -191,7 +191,7 @@ class Create_customer(FormView):
                 return response
             return JsonResponse({"message": 'customer added successfully'})
         else:
-            form = CustomerForm()
+            return render(request, 'create_customer.html', {'form': form})
         return render(request, 'create_customer.html', {'form': form})
 
     @is_admin_or_has_valid_OIDC_id
@@ -209,7 +209,7 @@ class Create_customer(FormView):
                 return response
             return JsonResponse({"message": 'customer added successfully'})
         else:
-            form = CustomerForm()
+            return render(request, 'create_customer.html', {'form': form})
         return render(request, 'create_customer.html', {'form': form})
 
 class Create_order(FormView):
@@ -220,13 +220,12 @@ class Create_order(FormView):
         if form.is_valid():
             amount = form.cleaned_data['amount']
             item = form.cleaned_data['item']
-            customer = form.cleaned_data['name']
+            customer = form.cleaned_data['customer_name']
             try:
                 customer_ref = Customer.objects.get(name=customer)
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
                 recepients = [customer_ref.phone_number]
-                print(item)
                 send_sms_notification.delay(recepients, item)
             except Exception as e:
                 print(e)
@@ -234,7 +233,7 @@ class Create_order(FormView):
                 return response
             return JsonResponse({"message": 'order added successfully'})
         else:
-            form = OrdererForm()
+            form = OrderForm()
         return render(request, 'create_order.html', {'form': form})
 
 
@@ -246,13 +245,12 @@ class Create_order(FormView):
         if form.is_valid():
             amount = form.cleaned_data['amount']
             item = form.cleaned_data['item']
-            customer = form.cleaned_data['name']
+            customer = form.cleaned_data['customer_name']
             try:
                 customer_ref = Customer.objects.get(name=customer)
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
                 recepients = [customer_ref.phone_number]
-                print(item)
                 send_sms_notification.delay(recepients, item)
             except Exception as e:
                 response = JsonResponse({ "message": e.args[0] }, status=404)

@@ -5,6 +5,7 @@ from django.db import IntegrityError
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import BaseUserManager
 from django.core.validators import MinValueValidator, MinLengthValidator
+from django.core.exceptions import ValidationError
 
 
 def generate_uuid():
@@ -14,6 +15,10 @@ def generate_uuid():
 
 def get_time():
     return timezone.now()
+
+def validate_phone_number(value):
+    if len(value) != 13:
+        raise ValidationError('Phone number must be 13 digits long. Make sure country code is included')
 
 class BaseModel(models.Model):
     """base class to be inherited by user model. Ensures each user object has a unique id
@@ -51,7 +56,8 @@ class CustomUserManager(BaseUserManager):
 class Customer(BaseModel):
     name = models.CharField(max_length=60, unique=True)
     code = models.CharField(max_length=60, default=generate_uuid)
-    phone_number = models.CharField(max_length=60, unique=True)
+    phone_number = models.CharField(max_length=13, unique=True, validators=[MinLengthValidator(13)])
+
     class Meta:
          db_table = 'customers'
 

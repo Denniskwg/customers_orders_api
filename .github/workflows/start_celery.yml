@@ -1,0 +1,21 @@
+name: start-celery-worker
+
+on:
+  deployment_status:
+    types: [success]
+
+jobs:
+  start-celery-worker:
+    runs-on: ubuntu-latest
+      steps:
+        - name: Checkout code
+          uses: actions/checkout@v4
+
+        - name: Set up Heroku CLI
+          uses: actions/setup-python@v2
+          with:
+              python-version: 3.10.6
+        - name: Deploy Celery Worker
+          run: |
+            heroku ps:scale worker=1 --app your-heroku-app-name
+
