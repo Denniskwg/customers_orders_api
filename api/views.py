@@ -16,6 +16,7 @@ from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 import os
 from api.tasks import send_sms_notification
+from django.views import View
 
 
 def status(request):
