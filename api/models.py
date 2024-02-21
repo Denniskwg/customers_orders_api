@@ -82,5 +82,3 @@ class User(AbstractUser, BaseModel):
 
     USERNAME_FIELD = 'username'
     REQUIRED_FIELDS = ['password']
-    class Meta:
-        db_table = 'users'

@@ -65,11 +65,7 @@ class Home(TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html')
 
-class FaviconView(View):
-    def get(self, request, *args, **kwargs):
-        return HttpResponse()
-
-class Logout(APIView):
+class Logout(View):
     """logout view
     """
     def get(self, request, *args, **kwargs):
@@ -126,7 +122,7 @@ class Login(TemplateView):
 
 
 
-class Register(APIView):
+class Register(View):
     """register view
     registers a new user using password and username
     """
