@@ -13,6 +13,7 @@ from .models import User, Customer, Order
 import jwt
 from .decorators import is_admin_or_has_valid_OIDC_id
 from django.views.generic.edit import FormView
+from django.views.generic import TemplateView
 import os
 from api.tasks import send_sms_notification
 
@@ -57,7 +58,7 @@ def oauth_callback(request):
     else:
         return HttpResponse("Authorization code not found.")
 
-class Home(APIView):
+class Home(TemplateView):
     """homepage view
     """
     def get(self, request, *args, **kwargs):
@@ -71,7 +72,7 @@ class Logout(APIView):
         return redirect('home')
 
 
-class Login(APIView):
+class Login(TemplateView):
     """login view
     """
     def post(self, request, *args, **kwargs):
