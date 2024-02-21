@@ -20,7 +20,7 @@ def is_admin_or_has_valid_OIDC_id(view_func):
     @wraps(view_func)
     def wrapped_view(instance, request, *args, **kwargs):
         client_id = os.environ.get('CLIENT_ID', None)
-        host_url = os.environ.get('APP_URL', 'http://127.0.0.1:8000')
+        host_url = os.environ.get('APP_URL_1', 'http://127.0.0.1:8000')
         base_url = 'openid/authorize/?'
         url = '{}response_type=code&client_id={}&redirect_uri={}&scope={}'.format(
             base_url,

@@ -29,7 +29,7 @@ def oauth_callback(request):
     redirects to a protected resource after obtaining oidc id
     """
     if 'code' in request.GET:
-        host_url = os.environ.get('APP_URL', 'http://127.0.0.1:8000')
+        host_url = os.environ.get('APP_URL_1', 'http://127.0.0.1:8000')
         authorization_code = request.GET.get('code')
         token_endpoint = '{}/openid/token/'.format(host_url)
         redirect_uri = '{}/oauth_callback/'.format(host_url)
