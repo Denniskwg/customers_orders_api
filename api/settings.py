@@ -21,6 +21,11 @@ DATABASE_URL = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.e
 
 db_url = os.environ.get('SCHEMATOGO_URL', DATABASE_URL)
 
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, 'api/static'),
+]
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Quick-start development settings - unsuitable for production
