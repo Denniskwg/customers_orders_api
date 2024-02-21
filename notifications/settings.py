@@ -18,7 +18,7 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.environ.get('db_username'), os.environ.get('db_password'))
-db_url = os.environ.get('JAWSDB_URL', DATABASE_URL)
+db_url = os.environ.get('SCHEMATOGO_URL', DATABASE_URL)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
@@ -128,5 +128,5 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Celery settings
-CELERY_BROKER_URL = os.getenv("REDIS_URL","redis://localhost:6379")
-CELERY_RESULT_BACKEND = os.getenv("REDIS_URL","redis://localhost:6379")
+CELERY_BROKER_URL = os.getenv("REDISCLOUD_URL","redis://localhost:6379")
+CELERY_RESULT_BACKEND = os.getenv("REDISCLOUD_URL","redis://localhost:6379")

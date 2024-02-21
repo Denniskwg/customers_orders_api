@@ -19,8 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 DATABASE_URL = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.environ.get('db_username'), os.environ.get('db_password'))
 
-db_url = os.environ.get('JAWSDB_URL', DATABASE_URL)
+db_url = os.environ.get('SCHEMATOGO_URL', DATABASE_URL)
 
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
