@@ -20,18 +20,20 @@ def is_admin_or_has_valid_OIDC_id(view_func):
     @wraps(view_func)
     def wrapped_view(instance, request, *args, **kwargs):
         client_id = os.environ.get('CLIENT_ID', None)
+        host_url = os.environ.get('APP_URL', 'http://127.0.0.1:8000')
         base_url = 'openid/authorize/?'
         url = '{}response_type=code&client_id={}&redirect_uri={}&scope={}'.format(
             base_url,
             client_id,
-            'http://127.0.0.1:8000/oauth_callback/',
+            '{}/oauth_callback/'.format(host_url),
             'openid',
         )
         if request.user.is_authenticated and request.user.is_staff:
             print("ADMIN")
             return view_func(instance, request, *args, **kwargs)
         else:
-            response = requests.get('http://127.0.0.1:8000/openid/jwks/')
+            jwk_url = '{}/openid/jwks/'.format(host_url)
+            response = requests.get(jwk_url)
             response_jwk = response.json()
             identifier = os.environ.get('OIDC_KEY_IDENTIFIER', None)
             jwk_dict = next(key for key in response_jwk["keys"] if key["kid"] == identifier)
