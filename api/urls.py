@@ -60,4 +60,5 @@ urlpatterns = [
     path('register', views.Register.as_view(), name='register'),
     path('', views.Home.as_view(), name='home'),
     path('logout', views.Logout.as_view(), name='logout'),
+    path('favicon.ico', views.FaviconView.as_view(), name='favicon'),
 ]

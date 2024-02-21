@@ -64,6 +64,10 @@ class Home(TemplateView):
     def get(self, request, *args, **kwargs):
         return render(request, 'home.html')
 
+class FaviconView(View):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse()
+
 class Logout(APIView):
     """logout view
     """
