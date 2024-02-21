@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-from oidc_provider.models import Client
+from oidc_provider.models import Client, ResponseType
 import os
 
 
@@ -12,12 +12,12 @@ oidc_client = Client.objects.create(
     client_id=client_id,
     client_secret=client_secret,
     client_type="confidential",
-    response_types=["code"],
     jwt_alg="RS256",
-    scope={
-        "openid": "OpenID Connect scope"
-    },
     redirect_uris='{}/oauth_callback/'.format(host_url)
 )
-
+response_type_code = ResponseType.objects.create(value='code')
+oidc_client.response_types.add(response_type_code)
+oidc_client.scope = {
+    "openid": "OpenID Connect scope"
+}
 oidc_client.save()

@@ -51,7 +51,6 @@ def is_admin_or_has_valid_OIDC_id(view_func):
                 exp_time = datetime.utcfromtimestamp(decoded_token['exp'])
                 if current_time > exp_time:
                     raise jwt.ExpiredSignatureError
-                #decoded_token = jwt.decode(oidc_id_token, options={"verify_signature": False})
                 return view_func(instance, request, *args, **kwargs)
             except jwt.InvalidSignatureError as e:
                 print(repr(e))
