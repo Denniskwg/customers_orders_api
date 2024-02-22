@@ -21,7 +21,6 @@ def is_admin_or_has_valid_OIDC_id(view_func):
     def wrapped_view(instance, request, *args, **kwargs):
         client_id = os.environ.get('CLIENT_ID', None)
         host_url = os.environ.get('APP_URL_1', 'http://127.0.0.1:8000')
-        environment = os.environ.get('ENV', None)
         base_url = 'openid/authorize/?'
         url = '{}response_type=code&client_id={}&redirect_uri={}&scope={}'.format(
             base_url,
@@ -37,13 +36,10 @@ def is_admin_or_has_valid_OIDC_id(view_func):
             response = requests.get(jwk_url)
             response_jwk = response.json()
             identifier = os.environ.get('OIDC_KEY_IDENTIFIER', None)
-            if environment is None:
-                jwk_dict = next(key for key in response_jwk["keys"] if key["kid"] == identifier)
+            jwk_dict = next(key for key in response_jwk["keys"] if key["kid"] == identifier)
 
-                public_key = jwk.construct(jwk_dict)
-                key = public_key.to_pem().decode('utf-8')
-            else:
-                key = os.environ.get('PUB_KEY')
+            public_key = jwk.construct(jwk_dict)
+            key = public_key.to_pem().decode('utf-8')
 
             oidc_id_token = request.COOKIES.get('oidc_id_token', None)
             if oidc_id_token is None:

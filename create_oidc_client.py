@@ -15,9 +15,7 @@ oidc_client = Client.objects.create(
     jwt_alg="RS256",
     redirect_uris='{}/oauth_callback/'.format(host_url)
 )
-response_type_code = ResponseType.objects.create(value='code')
-oidc_client.response_types.add(response_type_code)
-oidc_client.scope = {
-    "openid": "OpenID Connect scope"
-}
+response_type_code = ResponseType.objects.get(value='code')
+oidc_client.response_types.set([response_type_code])
+oidc_client.scope = ["openid"]
 oidc_client.save()

@@ -16,6 +16,10 @@ class CustomerForm(forms.ModelForm):
     class Meta:
         model = Customer
         fields = ['name', 'phone_number']
+        widgets = {
+            'name': forms.TextInput(attrs={'placeholder': 'Enter customer name'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'Number should start with country code'}),
+        }
 
 
 class OrderForm(forms.Form):

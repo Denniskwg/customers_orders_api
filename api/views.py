@@ -76,6 +76,7 @@ class Logout(View):
 class Login(TemplateView):
     """login view
     """
+    @is_admin_or_has_valid_OIDC_id
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -100,6 +101,7 @@ class Login(TemplateView):
                     return JsonResponse({"message": "user doesn't exist"}, status=404)
         return render(request, 'login.html', {'form': form})
 
+    @is_admin_or_has_valid_OIDC_id
     def get(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
