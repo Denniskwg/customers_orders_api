@@ -15,7 +15,7 @@ from .decorators import is_admin_or_has_valid_OIDC_id
 from django.views.generic.edit import FormView
 from django.views.generic import TemplateView
 import os
-from api.tasks import send_sms_notification
+from notifications.tasks import send_sms_notification
 from django.views import View
 
 
