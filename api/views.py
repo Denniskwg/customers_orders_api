@@ -229,7 +229,9 @@ class Create_order(FormView):
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
                 recepients = [customer_ref.phone_number]
-                send_sms_notification.delay(recepients, item)
+                from .sms import SMS
+                SMS().send(recepients, item)
+                #send_sms_notification.delay(recepients, item)
             except Exception as e:
                 print(e)
                 response = JsonResponse({ "message": e.args[0] }, status=404)
@@ -254,7 +256,9 @@ class Create_order(FormView):
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
                 order.save()
                 recepients = [customer_ref.phone_number]
-                send_sms_notification.delay(recepients, item)
+                from .sms import SMS
+                SMS().send(recepients, item)
+                #send_sms_notification.delay(recepients, item)
             except Exception as e:
                 response = JsonResponse({ "message": e.args[0] }, status=404)
                 return response
