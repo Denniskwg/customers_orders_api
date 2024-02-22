@@ -1,2 +1,2 @@
 web: gunicorn api.wsgi
-worker: celery -A notifications --loglevel=INFO --broker=$REDISCLOUD_URL
+worker: celery -A notifications --broker=$REDISCLOUD_URL
