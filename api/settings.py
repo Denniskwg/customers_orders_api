@@ -17,9 +17,7 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-db_url = 'postgres://{}:{}@localhost:5432/customers_orders_db'.format(os.environ.get('db_username'), os.environ.get('db_password'))
-
-DATABASE_URL = os.environ.get('DATABASE_URL', db_url)
+db_from_env = dj_database_url.config(conn_max_age=600)
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -100,7 +98,7 @@ WSGI_APPLICATION = 'api.wsgi.application'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': dj_database_url.config(default=DATABASE_URL)
+    'default': db_from_env
 }
 
 
