@@ -39,6 +39,10 @@ jobs:
         ports:
           - 5432:5432
         options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
+
+    env:
+      DATABASE_URL: postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/customers_orders_db
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -58,7 +62,5 @@ jobs:
           python manage.py migrate --noinput
 
       - name: Run tests
-        env:
-          DATABASE_URL: django.db.backends.postgresql_psycopg2://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/customers_orders_db
         run: |
           python3 manage.py test api
