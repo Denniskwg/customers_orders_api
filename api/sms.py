@@ -24,6 +24,6 @@ class SMS:
         try:
             # Thats it, hit send and we'll take care of the rest.
             response = self.sms.send(message, recepients)
-            print (response)
         except Exception as e:
             print ('Encountered an error while sending: %s' % str(e))
+        return response

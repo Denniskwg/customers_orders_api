@@ -18,7 +18,7 @@ class CustomerForm(forms.ModelForm):
         fields = ['name', 'phone_number']
         widgets = {
             'name': forms.TextInput(attrs={'placeholder': 'Enter customer name'}),
-            'phone_number': forms.TextInput(attrs={'placeholder': 'Number should start with country code'}),
+            'phone_number': forms.TextInput(attrs={'placeholder': 'should start with country code'}),
         }
 
 

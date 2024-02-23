@@ -76,7 +76,6 @@ class Logout(View):
 class Login(TemplateView):
     """login view
     """
-    @is_admin_or_has_valid_OIDC_id
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -101,7 +100,6 @@ class Login(TemplateView):
                     return JsonResponse({"message": "user doesn't exist"}, status=404)
         return render(request, 'login.html', {'form': form})
 
-    @is_admin_or_has_valid_OIDC_id
     def get(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
@@ -183,7 +181,6 @@ class Create_customer(FormView):
     """
     @is_admin_or_has_valid_OIDC_id
     def post(self, request, *args, **kwargs):
-        print(request.user)
         form = CustomerForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -201,7 +198,6 @@ class Create_customer(FormView):
 
     @is_admin_or_has_valid_OIDC_id
     def get(self, request, *args, **kwargs):
-        print(request.user)
         form = CustomerForm(request.POST)
         if form.is_valid():
             name = form.cleaned_data['name']
@@ -220,7 +216,6 @@ class Create_customer(FormView):
 class Create_order(FormView):
     @is_admin_or_has_valid_OIDC_id
     def post(self, request, *args, **kwargs):
-        print(request.user)
         form = OrderForm(request.POST)
         if form.is_valid():
             amount = form.cleaned_data['amount']
@@ -229,16 +224,26 @@ class Create_order(FormView):
             try:
                 customer_ref = Customer.objects.get(name=customer)
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
-                order.save()
                 recepients = [customer_ref.phone_number]
-                from .sms import SMS
-                SMS().send(recepients, item)
+                environment = os.environ.get('ENV', None)
+                if environment is None or environment == 'TEST_SMS':
+                    from .sms import SMS
+                    message_response = SMS().send(recepients, item)
                 #send_sms_notification.delay(recepients, item)
             except Exception as e:
                 print(e)
                 response = JsonResponse({ "message": e.args[0] }, status=404)
                 return response
-            return JsonResponse({"message": 'order added successfully'})
+            if environment is None or environment == 'TEST_SMS':
+                message_status = message_response.get('SMSMessageData').get('Recipients')[0].get('status')
+                if message_status == 'Success':
+                    order.save()
+                    return JsonResponse({"message": 'order added successfully', 'notification_status': message_status}, status=200)
+                else:
+                    order.delete()
+                    return JsonResponse({"message": 'order failed! Customer number invalid', 'notification_status': message_status}, status=400)
+            else:
+                return JsonResponse({"message": 'order added successfully'}, status=200)
         else:
             form = OrderForm()
         return render(request, 'create_order.html', {'form': form})
@@ -247,7 +252,6 @@ class Create_order(FormView):
 
     @is_admin_or_has_valid_OIDC_id
     def get(self, request, *args, **kwargs):
-        print(request.user)
         form = OrderForm(request.POST)
         if form.is_valid():
             amount = form.cleaned_data['amount']
@@ -256,15 +260,25 @@ class Create_order(FormView):
             try:
                 customer_ref = Customer.objects.get(name=customer)
                 order = Order.objects.create(amount=amount, item=item, customer=customer_ref)
-                order.save()
                 recepients = [customer_ref.phone_number]
-                from .sms import SMS
-                SMS().send(recepients, item)
+                environment = os.environ.get('ENV', None)
+                if environment is None or environment == 'TEST_SMS':
+                    from .sms import SMS
+                    message_response = SMS().send(recepients, item)
                 #send_sms_notification.delay(recepients, item)
             except Exception as e:
                 response = JsonResponse({ "message": e.args[0] }, status=404)
                 return response
-            return JsonResponse({"message": 'order added successfully'})
+            if environment is None or environment == 'TEST_SMS':
+                message_status = message_response.get('SMSMessageData').get('Recipients')[0].get('status')
+                if message_status == 'Success':
+                    order.save()
+                    return JsonResponse({"message": 'order added successfully', 'notification_status': message_status}, status=200)
+                else:
+                    order.delete()
+                    return JsonResponse({"message": 'order failed! Customer number invalid', 'notification_status': message_status}, status=400)
+            else:
+                return JsonResponse({"message": 'order added successfully'}, status=200)
         else:
             form = OrderForm()
         return render(request, 'create_order.html', {'form': form})
