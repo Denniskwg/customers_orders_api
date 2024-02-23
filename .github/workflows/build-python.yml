@@ -59,6 +59,6 @@ jobs:
 
       - name: Run tests
         env:
-          DATABASE_URL: django.db.backends.postgresql://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/customers_orders_db
+          DATABASE_URL: django.db.backends.postgresql_psycopg2://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/customers_orders_db
         run: |
           python3 manage.py test api
