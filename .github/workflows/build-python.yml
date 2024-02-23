@@ -53,12 +53,12 @@ jobs:
           python3 -m pip install --upgrade pip
           pip install -r requirements.txt
 
-       - name: Prepare database
-         run: |
-           python manage.py migrate --noinput
+      - name: Prepare database
+        run: |
+          python manage.py migrate --noinput
 
-       - name: Run tests
-         env:
-           SCHEMATOGO_URL: postgres://postgres:postgres@localhost:5432/test_db
-         run: |
-           python3 manage.py test api
+      - name: Run tests
+        env:
+          SCHEMATOGO_URL: postgres://postgres:postgres@localhost:5432/test_db
+        run: |
+          python3 manage.py test api
