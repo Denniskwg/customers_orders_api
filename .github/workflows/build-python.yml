@@ -42,6 +42,10 @@ jobs:
 
     env:
       DATABASE_URL: postgres://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/customers_orders_db
+      CLIENT_ID: ${{ secrets.CLIENT_ID }}
+      CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      SMS_API_KEY: ${{ secrets.SMS_API_KEY }}
+      SMS_API_USERNAME: ${{ secrets.SMS_API_USERNAME }}
 
     steps:
       - name: Checkout code
