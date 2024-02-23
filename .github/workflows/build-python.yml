@@ -33,8 +33,8 @@ jobs:
       postgres:
         image: postgres:13
         env:
-          POSTGRES_USER: ${{ secrets.db_username }}
-          POSTGRES_PASSWORD: ${{ secrets.db_password }}
+          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
+          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
           POSTGRES_DB: customers_orders_db
         ports:
           - 5432:5432
@@ -59,6 +59,6 @@ jobs:
 
       - name: Run tests
         env:
-          DATABASE_URL: postgresql://${{ secrets.db_username }}:${{ secrets.db_password }}@localhost:5432/customers_orders_db
+          DATABASE_URL: postgresql://${{ secrets.DB_USERNAME }}:${{ secrets.DB_PASSWORD }}@localhost:5432/customers_orders_db
         run: |
           python3 manage.py test api
