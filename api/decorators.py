@@ -43,6 +43,7 @@ def is_admin_or_has_valid_OIDC_id(view_func):
                 public_key = jwk.construct(jwk_dict)
                 key = public_key.to_pem().decode('utf-8')
             else:
+                #test environment
                 key = os.environ.get('PUB_KEY')
 
             oidc_id_token = request.COOKIES.get('oidc_id_token', None)

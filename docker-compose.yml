@@ -1,0 +1,45 @@
+services:
+  db:
+    image: postgres:latest
+    container_name: customers-orders-db
+    environment:
+      POSTGRES_PASSWORD: dkamau476
+    volumes:
+      - ./init_db.sql:/docker-entrypoint-initdb.d/init_db.sql
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - customers-app-network
+
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: customers-orders-app
+    command: >
+      bash -c "python3 manage.py migrate && python3 manage.py runserver 0.0.0.0:8000"
+    volumes:
+      - .:/app
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgres://dennis:dkamau476@db:5432/customers_orders_db
+      - CLIENT_ID=029577
+      - CLIENT_SECRET=326fdc504ed9981aee7ede2a8ba444a11e1b2f82140925f02e120dfd
+      - OIDC_KEY_IDENTIFIER=8769d2a3128ed248f1fbd13bbd6ee0b7
+    depends_on:
+      - db
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -h db -p 5432 -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - customers-app-network
+
+networks:
+  customers-app-network:
+    driver: bridge
+volumes:
+  db_data:
