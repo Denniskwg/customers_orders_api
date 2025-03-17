@@ -2,14 +2,22 @@
   "version": 2,
   "builds": [
     {
-      "src": "manage.py",
+      "src": "requirements.txt",
       "use": "@vercel/python"
+    },
+    {
+      "src": "vercel_build.sh",
+      "use": "@vercel/static-build"
     }
   ],
   "routes": [
     {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
+    {
       "src": "/(.*)",
-      "dest": "manage.py"
+      "dest": "api.wsgi"
     }
   ]
 }
