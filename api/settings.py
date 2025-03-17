@@ -33,7 +33,7 @@ DEBUG = True
 
 url = os.environ.get('APP_URL', '127.0.0.1')
 
-ALLOWED_HOSTS = [url]
+ALLOWED_HOSTS = [url, 'customers-orders-api.vercel.app']
 
 
 # Application definition
@@ -54,6 +54,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     'django.contrib.sessions.middleware.SessionMiddleware',
     'oauth2_provider.middleware.OAuth2TokenMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -63,6 +64,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 ROOT_URLCONF = 'api.urls'
 AUTH_USER_MODEL = 'api.User'
 
