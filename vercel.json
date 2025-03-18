@@ -13,7 +13,7 @@
     },
     {
       "src": "/(.*)",
-      "dest": "api.wsgi"
+      "dest": "api/wsgi"
     }
   ]
 }
