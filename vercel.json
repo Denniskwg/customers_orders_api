@@ -4,10 +4,6 @@
     {
       "src": "requirements.txt",
       "use": "@vercel/python"
-    },
-    {
-      "src": "vercel_build.sh",
-      "use": "@vercel/bash"
     }
   ],
   "routes": [
