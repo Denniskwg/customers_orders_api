@@ -9,6 +9,7 @@ echo "🔹 Checking Gunicorn installation..."
 which gunicorn || echo "⚠️ Gunicorn NOT found in PATH!"
 pip show gunicorn || echo "⚠️ Gunicorn NOT installed in this environment!"
 
+python3 manage.py makemigrations
 python3 manage.py migrate
 python3 manage.py collectstatic --noinput
 export PATH="$HOME/.local/bin:$PATH"
