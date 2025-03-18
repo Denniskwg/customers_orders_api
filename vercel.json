@@ -15,6 +15,7 @@
       "src": "/(.*)",
       "dest": "api/wsgi"
     }
-  ]
+  ],
+  "outputDirectory": "vercel/output"
 }
 
