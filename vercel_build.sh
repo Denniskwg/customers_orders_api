@@ -1,5 +1,7 @@
 #!/bin/bash
-python3 pip install --upgrade pip
+python3 -m ensurepip --default-pip
+python3 -m pip install --upgrade pip
+
 python3 pip install --no-cache-dir -r requirements.txt
 
 echo "🔹 Checking Gunicorn installation..."
