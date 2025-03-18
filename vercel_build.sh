@@ -3,7 +3,7 @@ python3 -m ensurepip --default-pip
 python3 -m pip install --upgrade pip
 
 python3 pip install --no-cache-dir -r requirements.txt
-
+python3 pip install gunicorn
 echo "🔹 Checking Gunicorn installation..."
 which gunicorn || echo "⚠️ Gunicorn NOT found in PATH!"
 pip show gunicorn || echo "⚠️ Gunicorn NOT installed in this environment!"
